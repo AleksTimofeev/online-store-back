@@ -4,9 +4,14 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "./users/users.entity";
+import { ConfigModule } from "@nestjs/config";
+
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env'
+    }),
     TypeOrmModule.forRoot({
       // type: "postgres",
       // host: "localhost",
@@ -18,7 +23,7 @@ import { User } from "./users/users.entity";
       // synchronize: true
       "name": "default",
       "type": "postgres",
-      "url": 'postgres://sncqcowa:YKQIAJgM9_KuAu39WvTJVznjbJyyjcm2@dumbo.db.elephantsql.com/sncqcowa',
+      "url": process.env.URL,
       "synchronize": true,
       "logging": true,
       entities: [User]
