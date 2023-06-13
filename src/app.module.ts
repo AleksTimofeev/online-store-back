@@ -14,20 +14,21 @@ import { AuthModule } from './auth/auth.module';
       envFilePath: '.env'
     }),
     TypeOrmModule.forRoot({
-      // type: "postgres",
-      // host: "localhost",
-      // port: 5432,
-      // username: "postgres",
-      // password: "Sasha26031003",
-      // database: "nest-test-project",
-      // entities: [User],
-      // synchronize: true
-      "name": "default",
-      "type": "postgres",
-      "url": process.env.URL,
-      "synchronize": true,
-      "logging": true,
-      entities: [User]
+      type: "postgres",
+      host: "localhost",
+      port: 5432,
+      username: "postgres",
+      password: "Sasha26031003",
+      database: "nest-test-project",
+      entities: [User],
+      synchronize: true
+
+      // "name": "default",
+      // "type": "postgres",
+      // "url": process.env.URL,
+      // "synchronize": true,
+      // "logging": true,
+      // entities: [User]
     }),
     UsersModule,
     AuthModule

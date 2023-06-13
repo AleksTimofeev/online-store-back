@@ -12,9 +12,10 @@ export class UsersService {
 
   async createUser(user: CreateUserDto) {
 
-      const searchUser = await this.userRepository.findBy({email: user.email, login: user.login})
-      if(!searchUser.length){
+      const searchUser = await this.userRepository.findOneBy({email: user.email})
+      if(!searchUser){
         await this.userRepository.save(user)
+
         return 'create user...'
       }
       throw new HttpException('there is already such a user', HttpStatus.BAD_REQUEST)
@@ -25,11 +26,11 @@ export class UsersService {
     return await this.userRepository.find({select: {login: true, email: true, id: true}})
   }
 
-  async findUser(id: string){
-    const user = await this.userRepository.findOneBy({id})
+  async findUser(email: string){
+    const user = await this.userRepository.findOneBy({email})
     if(user){
-      const {password, ...rest} = user
-      return rest
+      // const {password, ...rest} = user
+      return user
     }
     throw new HttpException('user not found', HttpStatus.NOT_FOUND)
   }

@@ -20,9 +20,9 @@ export class UsersController {
     return this.usersService.getAllUsers()
   }
 
-  @Get(':id')
-  findUser(@Param('id') id: string){
-    return this.usersService.findUser(id)
+  @Get(':email')
+  findUser(@Param('email') email: string){
+    return this.usersService.findUser(email)
   }
 
 }
