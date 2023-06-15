@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length, min } from "class-validator";
+import { IsEmail, IsNotEmpty, Length, min } from "class-validator";
 import { UUID } from "crypto";
 
 export class CreateUserDto {
@@ -6,6 +6,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   readonly login: string
 
+  @IsEmail()
   @IsNotEmpty()
   readonly email: string
 

@@ -10,12 +10,6 @@ export class UsersController {
   ) {
   }
 
-  @Post()
-  @UsePipes(ValidationPipe)
-  createUser(@Body() user: CreateUserDto){
-    return this.usersService.createUser(user)
-  }
-
   @UseGuards(AuthGuard)
   @Get()
   getAllUsers(){

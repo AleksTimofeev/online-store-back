@@ -6,6 +6,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "./users/users.entity";
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from './auth/auth.module';
+import { RolesModule } from './roles/roles.module';
+import { Role } from "./roles/roles.entity";
 
 
 @Module({
@@ -20,7 +22,7 @@ import { AuthModule } from './auth/auth.module';
       // username: "postgres",
       // password: "Sasha26031003",
       // database: "nest-test-project",
-      // entities: [User],
+      // entities: [User, Role],
       // synchronize: true
 
       "name": "default",
@@ -28,10 +30,11 @@ import { AuthModule } from './auth/auth.module';
       "url": process.env.URL,
       "synchronize": true,
       "logging": true,
-      entities: [User]
+      entities: [User, Role]
     }),
     UsersModule,
-    AuthModule
+    AuthModule,
+    RolesModule
   ],
   controllers: [AppController],
   providers: [AppService],
