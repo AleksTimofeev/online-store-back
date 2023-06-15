@@ -23,4 +23,9 @@ export class UsersController {
     return rest
   }
 
+  @Post()
+  changeUserRole(@Body() id: {id: string}){
+    return this.usersService.changeUserRole(id.id)
+  }
+
 }
