@@ -1,18 +1,27 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from "@nestjs/common";
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { BcryptModule } from "nest-bcrypt";
-import { UsersService } from "../users/users.service";
 import { UsersModule } from "../users/users.module";
+import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env'
+    }),
     BcryptModule.register({
       salt: 5
     }),
-    UsersModule
+    JwtModule.register({secret: process.env.SECRET, signOptions: {expiresIn: '24h'}}),
+    forwardRef(() => UsersModule)
+  ],
+  exports: [
+    JwtModule,
+    AuthModule
   ]
 })
 export class AuthModule {}

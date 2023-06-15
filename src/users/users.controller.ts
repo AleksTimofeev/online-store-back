@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from "@nestjs/common";
-import { CreateUserDto, FindUserDto } from "./users.dto";
+import { Body, Controller, Get, Param, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { CreateUserDto } from "./users.dto";
 import { UsersService } from "./users.service";
+import { AuthGuard } from "../auth/auth.guard";
 
 @Controller('users')
 export class UsersController {
@@ -15,14 +16,17 @@ export class UsersController {
     return this.usersService.createUser(user)
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   getAllUsers(){
     return this.usersService.getAllUsers()
   }
 
   @Get(':email')
-  findUser(@Param('email') email: string){
-    return this.usersService.findUser(email)
+  async findUser(@Param('email') email: string){
+    const user = await this.usersService.findUser(email)
+    const {password, ...rest} = user
+    return rest
   }
 
 }
