@@ -1,0 +1,42 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from "@nestjs/typeorm";
+import { Basket } from "./basket.entity";
+import { Repository } from "typeorm";
+import { BasketDto } from "./basket.dto";
+import { ProductsService } from "../products/products.service";
+
+@Injectable()
+export class BasketService {
+  constructor(
+    @InjectRepository(Basket) private basketRepository: Repository<Basket>,
+    private productsService: ProductsService,
+  ) {
+  }
+
+  async getBaskets(){
+    return await this.basketRepository.find({relations: {products: true}})
+  }
+  async getBasketById(id: string){
+    return await this.basketRepository.findOne({where: {id}, relations: {products: true}})
+  }
+
+  async addProductInBasket(productId: string, basketId: string){
+    const findBasket = await this.basketRepository.findOne({where: {id: basketId}, relations: {products: true}})
+    const findProduct = await this.productsService.getProductById(productId)
+    findBasket.products.push(findProduct)
+    return this.basketRepository.save(findBasket)
+  }
+
+  async removeProductInBasket(basketId: string, productId: string){
+    const findBasket = await this.getBasketById(basketId)
+    const b = findBasket.products.filter(p => p.id !== productId)
+    findBasket.products = b
+    return await this.basketRepository.save(findBasket)
+  }
+
+  async createBasket(basketDto: BasketDto = {products: []}){
+    const createBasket = await this.basketRepository.save(basketDto)
+    createBasket.products = []
+    return await this.basketRepository.save(createBasket)
+  }
+}

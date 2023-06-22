@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
-import { CreateUserDto } from "./users.dto";
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards} from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { AuthGuard } from "../auth/auth.guard";
 
@@ -12,10 +11,11 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Get()
-  getAllUsers(){
+  getAllUsers(@Req() request: Request){
     return this.usersService.getAllUsers()
   }
 
+  @UseGuards(AuthGuard)
   @Get(':email')
   async findUser(@Param('email') email: string){
     const user = await this.usersService.findUser(email)
@@ -26,6 +26,17 @@ export class UsersController {
   @Post()
   changeUserRole(@Body() id: {id: string}){
     return this.usersService.changeUserRole(id.id)
+  }
+
+  @Post('addInBasket')
+  addProductInUserBasket(@Body() addProductInBasket: {productId: string, userEmail: string}){
+    return this.usersService.addProductInUserBasket(addProductInBasket)
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':productId')
+  removeProductInBasket(@Param('productId') productId: string ,@Req() request: any){
+    return this.usersService.removeProductInBasket(productId, request.user.email)
   }
 
 }

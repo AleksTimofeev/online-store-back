@@ -8,6 +8,10 @@ import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
 import { Role } from "./roles/roles.entity";
+import { ProductsModule } from './products/products.module';
+import { BasketModule } from './basket/basket.module';
+import { Product } from "./products/products.entity";
+import { Basket } from "./basket/basket.entity";
 
 
 @Module({
@@ -22,7 +26,7 @@ import { Role } from "./roles/roles.entity";
       // username: "postgres",
       // password: "Sasha26031003",
       // database: "nest-test-project",
-      // entities: [User, Role],
+      // entities: [User, Role, Product, Basket],
       // synchronize: true
 
       "name": "default",
@@ -30,11 +34,13 @@ import { Role } from "./roles/roles.entity";
       "url": process.env.URL,
       "synchronize": true,
       "logging": true,
-      entities: [User, Role]
+      entities: [User, Role, Product, Basket]
     }),
     UsersModule,
     AuthModule,
-    RolesModule
+    RolesModule,
+    ProductsModule,
+    BasketModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -6,14 +6,19 @@ import { User } from "./users.entity";
 import { AuthModule } from "../auth/auth.module";
 import { RolesModule } from "../roles/roles.module";
 import { Role } from "../roles/roles.entity";
+import { Basket } from "../basket/basket.entity";
+import { BasketModule } from "../basket/basket.module";
+import { ProductsModule } from "../products/products.module";
 
 @Module({
   controllers: [UsersController],
   providers: [UsersService],
   imports: [
-    TypeOrmModule.forFeature([User, Role]),
+    TypeOrmModule.forFeature([User, Role, Basket]),
     forwardRef(() => AuthModule),
-    RolesModule
+    RolesModule,
+    forwardRef(() => BasketModule),
+    forwardRef(() => ProductsModule)
   ],
   exports: [UsersService]
 })
