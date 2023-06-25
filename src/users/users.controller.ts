@@ -28,6 +28,11 @@ export class UsersController {
     return this.usersService.changeUserRole(id.id)
   }
 
+  @Delete(':userId')
+  removeUser(@Param('userId') userId: string){
+    return this.usersService.removeUser(userId)
+  }
+
   @Post('addInBasket')
   addProductInUserBasket(@Body() addProductInBasket: {productId: string, userEmail: string}){
     return this.usersService.addProductInUserBasket(addProductInBasket)
