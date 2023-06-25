@@ -25,8 +25,7 @@ export class UsersService {
       const newUser = await this.userRepository.save(user);
       newUser.role = role;
       newUser.basket = basket;
-      await this.userRepository.save(newUser);
-      return "create user...";
+      return await this.userRepository.save(newUser);
     }
     throw new HttpException("there is already such a user", HttpStatus.BAD_REQUEST);
   }
@@ -52,6 +51,10 @@ export class UsersService {
     const role = await this.rolesService.findRole("admin");
     findUser.role = role;
     return await this.userRepository.save(findUser);
+  }
+
+  async removeUser(id: string){
+    return await this.userRepository.delete({id})
   }
 
   async addProductInUserBasket(addProductInBasket: { productId: string, userEmail: string }) {
