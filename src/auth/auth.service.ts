@@ -23,7 +23,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const findUser = await this.userService.findUser(loginDto.email);
-    const passwordToEqual = this.bcryptService.compare(loginDto.password, findUser.password);
+    const passwordToEqual = await this.bcryptService.compare(loginDto.password, findUser.password);
     if (!passwordToEqual) {
       throw new HttpException("password or email not correct.", HttpStatus.BAD_REQUEST);
     }
