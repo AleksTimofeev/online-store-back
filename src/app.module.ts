@@ -20,21 +20,21 @@ import { Basket } from "./basket/basket.entity";
       envFilePath: '.env'
     }),
     TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "postgres",
-      password: "Sasha26031003",
-      database: "nest-test-project",
-      entities: [User, Role, Product, Basket],
-      synchronize: true
+      // type: "postgres",
+      // host: "localhost",
+      // port: 5432,
+      // username: "postgres",
+      // password: "Sasha26031003",
+      // database: "nest-test-project",
+      // entities: [User, Role, Product, Basket],
+      // synchronize: true
 
-      // "name": "default",
-      // "type": "postgres",
-      // "url": process.env.URL,
-      // "synchronize": true,
-      // "logging": true,
-      // entities: [User, Role, Product, Basket]
+      "name": "default",
+      "type": "postgres",
+      "url": process.env.URL,
+      "synchronize": true,
+      "logging": true,
+      entities: [User, Role, Product, Basket]
     }),
     UsersModule,
     AuthModule,
