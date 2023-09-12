@@ -23,7 +23,7 @@ export class UsersService {
       const role = await this.rolesService.findRole("user");
       const basket = await this.basketService.createBasket();
       const newUser = await this.userRepository.save(user);
-      newUser.role = role;
+      newUser.role = [role]
       newUser.basket = basket;
       return await this.userRepository.save(newUser);
     }
@@ -32,13 +32,13 @@ export class UsersService {
 
   async getAllUsers() {
     return await this.userRepository.find(
-      { select: { login: true, email: true, id: true }, relations: { role: true, basket: { products: true } } }
+      { select: { login: true, email: true, id: true }, relations: { role: true , basket: { products: true} } }
     );
   }
 
   async findUser(email: string) {
     const user = await this.userRepository.findOne(
-      { where: { email }, relations: { basket: { products: true } } }
+      { where: { email }, relations: { role: true,  basket: { products: true } } }
     );
     if (!user) {
       throw new HttpException("user not found", HttpStatus.NOT_FOUND);
@@ -47,9 +47,9 @@ export class UsersService {
   }
 
   async changeUserRole(userId: string) {
-    const findUser = await this.userRepository.findOneBy({ id: userId });
+    const findUser = await this.userRepository.findOne({ where: {id: userId}, relations: {role: true} });
     const role = await this.rolesService.findRole("admin");
-    findUser.role = role;
+    findUser.role.push(role)
     return await this.userRepository.save(findUser);
   }
 

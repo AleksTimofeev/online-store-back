@@ -22,7 +22,7 @@ export class RolesService {
   }
 
   async getRoles(){
-    return await this.roleRepository.find({relations: {users: true}})
+    return await this.roleRepository.find()
   }
 
 }
