@@ -1,8 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn, JoinTable,
+  ManyToMany,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from "typeorm";
 import { Role } from "../roles/roles.entity";
 import { Basket } from "../basket/basket.entity";
-import { Product } from "../products/products.entity";
-
 
 @Entity('users')
 export class User {
@@ -18,8 +23,9 @@ export class User {
   @Column()
   password: string
 
-  @ManyToOne(() => Role, (role) => role.role)
-  role: Role
+  @ManyToMany(() => Role)
+  @JoinTable()
+  role: Role[]
 
   @OneToOne(() => Basket, (basket) => basket.id)
   @JoinColumn()

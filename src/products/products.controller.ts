@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { ProductsDto } from "./products.dto";
+import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
+import { ChangeProductDto, ProductsDto } from "./products.dto";
 import { ProductsService } from "./products.service";
 
 @Controller('products')
@@ -11,6 +11,11 @@ export class ProductsController {
   @Post()
   createProduct(@Body() productsDto: ProductsDto){
     return this.productsService.createProduct(productsDto)
+  }
+
+  @Put()
+  changeProduct(@Body() changeProductDto: ChangeProductDto){
+    return this.productsService.changeProduct(changeProductDto)
   }
 
   @Get(':id')
