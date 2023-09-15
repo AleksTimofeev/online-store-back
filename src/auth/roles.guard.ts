@@ -34,7 +34,6 @@ export class RolesGuard implements CanActivate {
       if (token && typeToken === 'Bearer') {
         const user = this.jwtService.verify(token);
         request.user = user
-        debugger
         return user.role.some(value => requireRoles.includes(value.role))
       }
     }catch (e) {
