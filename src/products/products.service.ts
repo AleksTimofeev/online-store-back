@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "./products.entity";
 import { Repository } from "typeorm";
-import { ChangeProductDto, ProductsDto } from "./products.dto";
+import { ChangeProductDto, CreateProductsDto } from "./products.dto";
 
 @Injectable()
 export class ProductsService {
@@ -10,8 +10,8 @@ export class ProductsService {
     @InjectRepository(Product) private productRepository: Repository<Product>,
   ) {}
 
-  async createProduct(productDto: ProductsDto){
-    return await this.productRepository.save(productDto)
+  async createProduct(createProduct: CreateProductsDto){
+    return await this.productRepository.save(createProduct)
   }
 
   async getProductById(id: string){
@@ -25,12 +25,20 @@ export class ProductsService {
     return await this.productRepository.find()
   }
 
-  async changeProduct(changeProductDto: ChangeProductDto) {
-    const findProduct = await this.productRepository.findOneBy({id: changeProductDto.id})
-    if(findProduct){
-      return await this.productRepository.save(changeProductDto)
-    }else{
-      throw new HttpException('Product not found', HttpStatus.NOT_FOUND)
+  // async changeProduct(changeProductDto: ChangeProductDto) {
+  //   const findProduct = await this.productRepository.findOneBy({id: changeProductDto.id})
+  //   if(findProduct){
+  //     return await this.productRepository.save(changeProductDto)
+  //   }else{
+  //     throw new HttpException('Product not found', HttpStatus.NOT_FOUND)
+  //   }
+  // }
+  async removeProduct(id: string) {
+    try {
+      return await this.productRepository.delete({id})
+    }catch (e){
+      throw new HttpException('remove product wrong', HttpStatus.BAD_REQUEST)
     }
   }
+
 }

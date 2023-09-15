@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post, Put } from "@nestjs/common";
-import { ChangeProductDto, ProductsDto } from "./products.dto";
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { ChangeProductDto, CreateProductsDto } from "./products.dto";
 import { ProductsService } from "./products.service";
 
 @Controller('products')
@@ -9,14 +9,18 @@ export class ProductsController {
   ) {}
 
   @Post()
-  createProduct(@Body() productsDto: ProductsDto){
-    return this.productsService.createProduct(productsDto)
+  createProduct(@Body() createProduct: CreateProductsDto){
+    return this.productsService.createProduct(createProduct)
+  }
+  @Delete(':id')
+  removeProduct(@Param('id') id: string){
+    return this.productsService.removeProduct(id)
   }
 
-  @Put()
-  changeProduct(@Body() changeProductDto: ChangeProductDto){
-    return this.productsService.changeProduct(changeProductDto)
-  }
+  // @Put()
+  // changeProduct(@Body() changeProductDto: ChangeProductDto){
+  //   return this.productsService.changeProduct(changeProductDto)
+  // }
 
   @Get(':id')
   getProductById(@Param('id') id: string){

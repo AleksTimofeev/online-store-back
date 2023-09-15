@@ -7,9 +7,24 @@ export class Product{
   id: string
 
   @Column()
-  name: string
+  title: string
 
   @Column()
-  price: number
+  description: string
+
+  @Column()
+  minDescription: string
+
+  @Column()
+  rating: string
+
+  @Column()
+  price: string
+
+  @Column()
+  imgUrlLarge: string | null
+
+  @Column()
+  imgUrlSmall: string | null
 
 }
