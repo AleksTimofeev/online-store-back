@@ -22,9 +22,9 @@ export class Product{
   price: string
 
   @Column()
-  imgUrlLarge: string | null
+  imgUrlLarge: string
 
   @Column()
-  imgUrlSmall: string | null
+  imgUrlSmall: string
 
 }

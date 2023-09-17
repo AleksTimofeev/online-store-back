@@ -25,14 +25,16 @@ export class ProductsService {
     return await this.productRepository.find()
   }
 
-  // async changeProduct(changeProductDto: ChangeProductDto) {
-  //   const findProduct = await this.productRepository.findOneBy({id: changeProductDto.id})
-  //   if(findProduct){
-  //     return await this.productRepository.save(changeProductDto)
-  //   }else{
-  //     throw new HttpException('Product not found', HttpStatus.NOT_FOUND)
-  //   }
-  // }
+  async changeProduct(changeProductDto: ChangeProductDto) {
+    const findProduct = await this.productRepository.findOneBy({id: changeProductDto.id})
+    if(findProduct){
+      await this.productRepository.update({ id: changeProductDto.id }, {...changeProductDto})
+      return changeProductDto
+    }else{
+      throw new HttpException('Product not found', HttpStatus.NOT_FOUND)
+    }
+  }
+
   async removeProduct(id: string) {
     try {
       return await this.productRepository.delete({id})

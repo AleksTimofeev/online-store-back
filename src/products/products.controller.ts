@@ -17,10 +17,10 @@ export class ProductsController {
     return this.productsService.removeProduct(id)
   }
 
-  // @Put()
-  // changeProduct(@Body() changeProductDto: ChangeProductDto){
-  //   return this.productsService.changeProduct(changeProductDto)
-  // }
+  @Put()
+  changeProduct(@Body() changeProductDto: ChangeProductDto){
+    return this.productsService.changeProduct(changeProductDto)
+  }
 
   @Get(':id')
   getProductById(@Param('id') id: string){
