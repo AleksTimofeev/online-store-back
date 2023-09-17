@@ -1,3 +1,4 @@
+import { IsNotEmpty, IsString } from "class-validator";
 
 
 export class CreateProductsDto {
@@ -6,16 +7,24 @@ export class CreateProductsDto {
   readonly minDescription: string
   readonly rating: string
   readonly price: string
-  readonly imgUrlLarge: string | null
-  readonly imgUrlSmall: string | null
+  readonly imgUrlLarge: string
+  readonly imgUrlSmall: string
 }
 export class ChangeProductDto {
+  @IsString()
   readonly id: string
+  @IsString()
   readonly title: string
+  @IsString()
   readonly description: string
+  @IsString()
   readonly minDescription: string
-  readonly rating: number
-  readonly price: number
-  readonly imgUrlLarge: string | null
-  readonly imgUrlSmall: string | null
+  @IsString()
+  readonly rating: string
+  @IsString()
+  readonly price: string
+  @IsString()
+  readonly imgUrlLarge: string
+  @IsString()
+  readonly imgUrlSmall: string
 }

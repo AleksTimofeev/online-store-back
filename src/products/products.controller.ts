@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ChangeProductDto, CreateProductsDto } from "./products.dto";
 import { ProductsService } from "./products.service";
 
@@ -17,10 +17,11 @@ export class ProductsController {
     return this.productsService.removeProduct(id)
   }
 
-  // @Put()
-  // changeProduct(@Body() changeProductDto: ChangeProductDto){
-  //   return this.productsService.changeProduct(changeProductDto)
-  // }
+  @Put()
+  @UsePipes(ValidationPipe)
+  changeProduct(@Body() changeProductDto: ChangeProductDto){
+    return this.productsService.changeProduct(changeProductDto)
+  }
 
   @Get(':id')
   getProductById(@Param('id') id: string){
