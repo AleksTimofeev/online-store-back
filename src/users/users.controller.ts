@@ -36,9 +36,10 @@ export class UsersController {
     return this.usersService.removeUser(userId)
   }
 
+  @UseGuards(AuthGuard)
   @Post('addInBasket')
-  addProductInUserBasket(@Body() addProductInBasket: {productId: string, userEmail: string}){
-    return this.usersService.addProductInUserBasket(addProductInBasket)
+  addProductInUserBasket(@Body() productId: { productId: string }, @Req() req: any){
+    return this.usersService.addProductInUserBasket({productId: productId.productId, userId: req.user.id})
   }
 
   @UseGuards(AuthGuard)

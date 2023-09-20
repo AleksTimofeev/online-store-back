@@ -17,9 +17,10 @@ export class ProductsService {
 
   async getProductById(id: string) {
     const findProduct = await this.productRepository.findOneBy({ id });
-    if (findProduct) {
-      return findProduct;
+    if (!findProduct) {
+      throw new HttpException('product not found', HttpStatus.NOT_FOUND)
     }
+    return findProduct;
   }
 
   async getAllProducts() {
