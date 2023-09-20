@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./users.dto";
+import { CreateUserDto, FindUserByIdDto } from "./users.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
@@ -46,6 +46,16 @@ export class UsersService {
     return user;
   }
 
+  async findUserById(id: string){
+    const user = await this.userRepository.findOne(
+      {where: {id}, relations: {role: true, basket: true}}
+    )
+    if (!user) {
+      throw new HttpException("user not found", HttpStatus.NOT_FOUND);
+    }
+    return user;
+  }
+
   async changeUserRole(userId: string) {
     const findUser = await this.userRepository.findOne({ where: {id: userId}, relations: {role: true} });
     const role = await this.rolesService.findRole("admin");
@@ -57,11 +67,12 @@ export class UsersService {
     return await this.userRepository.delete({id})
   }
 
-  async addProductInUserBasket(addProductInBasket: { productId: string, userEmail: string }) {
-    const findProduct = await this.productsService.getProductById(addProductInBasket.productId);
-    const findUser = await this.findUser(addProductInBasket.userEmail);
+  async addProductInUserBasket(addProduct: { productId: string, userId: string }) {
+    const {productId, userId} = addProduct
+    const findProduct = await this.productsService.getProductById(productId);
+    const findUser = await this.findUserById(userId);
     const findBasket = await this.basketService.getBasketById(findUser.basket.id);
-    return await this.basketService.addProductInBasket(addProductInBasket.productId, findUser.basket.id);
+    return await this.basketService.addProductInBasket(addProduct.productId, findUser.basket.id);
   }
 
   async removeProductInBasket(productId: string, email: string) {

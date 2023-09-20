@@ -14,7 +14,7 @@ export class CreateUserDto {
   readonly password: string
 }
 
-export class FindUserDto {
+export class FindUserByIdDto {
   @IsNotEmpty()
   readonly id: UUID
 }
