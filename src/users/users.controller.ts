@@ -37,9 +37,9 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('addInBasket')
-  addProductInUserBasket(@Body() productId: { productId: string }, @Req() req: any){
-    return this.usersService.addProductInUserBasket({productId: productId.productId, userId: req.user.id})
+  @Post('addInBasket/:productId')
+  addProductInUserBasket(@Param('productId') productId: string, @Req() req: any){
+    return this.usersService.addProductInUserBasket({productId, userId: req.user.id})
   }
 
   @UseGuards(AuthGuard)
