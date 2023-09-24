@@ -3,6 +3,8 @@ import { UsersService } from "./users.service";
 import { AuthGuard } from "../auth/auth.guard";
 import { Roles } from "../auth/roles-auth.decorator";
 import { RolesGuard } from "../auth/roles.guard";
+import { ChangeUserRoleDto } from "./users.dto";
+import { UUID } from "crypto";
 
 @Controller('users')
 export class UsersController {
@@ -11,24 +13,21 @@ export class UsersController {
   ) {
   }
 
-  @Roles('admin')
-  @UseGuards(RolesGuard)
+  // @Roles('admin')
+  // @UseGuards(RolesGuard)
   @Get()
   getAllUsers(@Req() request: Request){
     return this.usersService.getAllUsers()
   }
 
-  // @UseGuards(AuthGuard)
   @Get(':email')
-  async findUser(@Param('email') email: string){
-    const user = await this.usersService.findUser(email)
-    const {password, ...rest} = user
-    return rest
+  findUserByEmail(@Param('email') email: string){
+    return this.usersService.findUserByEmail(email)
   }
 
   @Post()
-  changeUserRole(@Body() id: {id: string}){
-    return this.usersService.changeUserRole(id.id)
+  changeUserRole(@Body() changeUserRole: ChangeUserRoleDto){
+    return this.usersService.changeUserRole(changeUserRole)
   }
 
   @Delete(':userId')

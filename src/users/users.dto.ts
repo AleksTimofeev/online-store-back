@@ -18,3 +18,19 @@ export class FindUserByIdDto {
   @IsNotEmpty()
   readonly id: UUID
 }
+
+export class ChangeUserRoleDto {
+  @IsNotEmpty()
+  readonly id: UUID
+
+  @IsNotEmpty()
+  readonly role: string
+}
+
+export class AddProductInBasketDto {
+  @IsNotEmpty()
+  readonly productId: string
+
+  @IsNotEmpty()
+  readonly userId: string
+}

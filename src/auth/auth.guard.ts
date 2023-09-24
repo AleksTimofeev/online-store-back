@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
         return true;
       }
     }catch (e) {
-      throw new UnauthorizedException("your are not authorized.");
+      throw new UnauthorizedException("your are not authorized --AuthGuard--.");
     }
   }
 }
