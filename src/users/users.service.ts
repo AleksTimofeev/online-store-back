@@ -1,5 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { ChangeUserRoleDto, CreateUserDto, FindUserByIdDto } from "./users.dto";
+import {
+  AddProductInBasketDto,
+  ChangeUserRoleDto,
+  CreateUserDto,
+} from "./users.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
@@ -75,12 +79,14 @@ export class UsersService {
     return await this.userRepository.delete({ id });
   }
 
-  async addProductInUserBasket(addProduct: { productId: string, userId: string }) {
-    const { productId, userId } = addProduct;
+  async addProductInUserBasket(addProductInBasket: AddProductInBasketDto) {
+    const { productId, userId } = addProductInBasket;
     const findProduct = await this.productsService.getProductById(productId);
-    const findUser = await this.userRepository.findOne({ where: { id: userId } });
-    const findBasket = await this.basketService.getBasketById(findUser.basket.id);
-    return await this.basketService.addProductInBasket(addProduct.productId, findUser.basket.id);
+    const findUser = await this.userRepository.findOne({ where: { id: userId }, relations: {basket: true} });
+    if(!findProduct && !findUser){
+      throw new HttpException('Product or User not found.', HttpStatus.BAD_REQUEST)
+    }
+    return await this.basketService.addProductInBasket({ productId, basketId: findUser.basket.id });
   }
 
   async removeProductInBasket(productId: string, email: string) {

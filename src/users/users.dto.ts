@@ -26,3 +26,11 @@ export class ChangeUserRoleDto {
   @IsNotEmpty()
   readonly role: string
 }
+
+export class AddProductInBasketDto {
+  @IsNotEmpty()
+  readonly productId: string
+
+  @IsNotEmpty()
+  readonly userId: string
+}

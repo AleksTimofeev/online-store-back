@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { Basket } from "./basket.entity";
 import { Repository } from "typeorm";
-import { BasketDto } from "./basket.dto";
+import { AddProductInBasketDto, BasketDto } from "./basket.dto";
 import { ProductsService } from "../products/products.service";
 
 @Injectable()
@@ -20,9 +20,9 @@ export class BasketService {
     return await this.basketRepository.findOne({where: {id}, relations: {products: true}})
   }
 
-  async addProductInBasket(productId: string, basketId: string){
-    const findBasket = await this.basketRepository.findOne({where: {id: basketId}, relations: {products: true}})
-    const findProduct = await this.productsService.getProductById(productId)
+  async addProductInBasket(addProductInBasket: AddProductInBasketDto){
+    const findBasket = await this.basketRepository.findOne({where: {id: addProductInBasket.basketId}, relations: {products: true}})
+    const findProduct = await this.productsService.getProductById(addProductInBasket.productId)
     findBasket.products.push(findProduct)
     return this.basketRepository.save(findBasket)
   }
