@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { CreateUserDto, FindUserByIdDto } from "./users.dto";
+import { ChangeUserRoleDto, CreateUserDto, FindUserByIdDto } from "./users.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./users.entity";
 import { Repository } from "typeorm";
@@ -55,11 +55,20 @@ export class UsersService {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  async changeUserRole(userId: string) {
-    const findUser = await this.userRepository.findOne({ where: { id: userId }, relations: { role: true } });
-    const role = await this.rolesService.findRole("admin");
+  async changeUserRole(changeUserRole: ChangeUserRoleDto) {
+    const findUser = await this.userRepository.findOne({ where: { id: changeUserRole.id }, relations: { role: true } });
+    const role = await this.rolesService.findRole(changeUserRole.role);
+    const userRoles = findUser.role
+    if(
+      userRoles.find(r => r.role === changeUserRole.role)
+    ){
+      findUser.role = userRoles.filter(r => r.role !== changeUserRole.role)
+      await this.userRepository.save(findUser)
+      return HttpStatus.OK
+    }
     findUser.role.push(role);
-    return await this.userRepository.save(findUser);
+    await this.userRepository.save(findUser);
+    return HttpStatus.OK
   }
 
   async removeUser(id: string) {
