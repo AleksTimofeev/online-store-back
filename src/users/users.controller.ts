@@ -58,7 +58,7 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete(':productId')
+  @Delete('remove-product-basket/:productId')
   removeProductInBasket(@Param('productId') productId: string ,@Req() request: any){
     return this.usersService.removeProductInBasket(productId, request.user.email)
   }
