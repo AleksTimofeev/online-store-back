@@ -113,7 +113,7 @@ export class UsersService {
   }
 
   async removeProductInBasket(productId: string, email: string) {
-    const findUser = await this.userRepository.findOne({ where: { email } });
+    const findUser = await this.userRepository.findOne({ where: { email }, relations: {basket: true} });
     return await this.basketService.removeProductInBasket(findUser.basket.id, productId);
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Basket } from "./basket.entity";
 import { Repository } from "typeorm";
@@ -17,7 +17,11 @@ export class BasketService {
     return await this.basketRepository.find({relations: {products: true}})
   }
   async getBasketById(id: string){
-    return await this.basketRepository.findOne({where: {id}, relations: {products: true}})
+    const findBasket = await this.basketRepository.findOne({where: {id}, relations: {products: true}})
+    if(!findBasket){
+      throw new HttpException('Basket not found', HttpStatus.NOT_FOUND)
+    }
+    return findBasket
   }
 
   async addProductInBasket(addProductInBasket: AddProductInBasketDto){
@@ -36,6 +40,7 @@ export class BasketService {
 
   async createBasket(basketDto: BasketDto = {products: []}){
     const createBasket = await this.basketRepository.save(basketDto)
+    debugger
     createBasket.products = []
     return await this.basketRepository.save(createBasket)
   }
