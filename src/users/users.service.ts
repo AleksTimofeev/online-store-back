@@ -75,6 +75,29 @@ export class UsersService {
     return HttpStatus.OK
   }
 
+  async addRoleForUser(changeUserRole: ChangeUserRoleDto) {
+    const findUser = await this.userRepository.findOne({ where: { id: changeUserRole.id }, relations: { role: true } });
+    const role = await this.rolesService.findRole(changeUserRole.role);
+    if(!findUser){throw new HttpException('User not found', HttpStatus.NOT_FOUND)}
+    if(!role){throw new HttpException('Role not found', HttpStatus.NOT_FOUND)}
+    if(findUser.role.find(r => r.role === changeUserRole.role)){
+      throw new HttpException('Такая роль уже присвоена этому пользователю', HttpStatus.BAD_REQUEST)
+    }
+    findUser.role.push(role);
+    await this.userRepository.save(findUser);
+    return findUser
+  }
+
+  async removeRoleUser(changeUserRole: ChangeUserRoleDto) {
+    const findUser = await this.userRepository.findOne({ where: { id: changeUserRole.id }, relations: { role: true } });
+    const role = await this.rolesService.findRole(changeUserRole.role);
+    if(!findUser){throw new HttpException('User not found', HttpStatus.NOT_FOUND)}
+    if(!role){throw new HttpException('Role not found', HttpStatus.NOT_FOUND)}
+    findUser.role = findUser.role.filter(role => role.role !== changeUserRole.role)
+    await this.userRepository.save(findUser);
+    return findUser
+  }
+
   async removeUser(id: string) {
     return await this.userRepository.delete({ id });
   }

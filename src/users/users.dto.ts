@@ -21,7 +21,7 @@ export class FindUserByIdDto {
 
 export class ChangeUserRoleDto {
   @IsNotEmpty()
-  readonly id: UUID
+  readonly id: string
 
   @IsNotEmpty()
   readonly role: string
