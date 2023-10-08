@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 
 export class CreateProductsDto {
@@ -27,4 +27,11 @@ export class ChangeProductDto {
   readonly imgUrlLarge: string
   @IsString()
   readonly imgUrlSmall: string
+}
+export class GetProductsDto {
+  @IsNumber()
+  readonly pageSize: number
+
+  @IsNumber()
+  readonly pageNumber: number
 }
