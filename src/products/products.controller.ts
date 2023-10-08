@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ChangeProductDto, CreateProductsDto } from "./products.dto";
 import { ProductsService } from "./products.service";
 
@@ -29,8 +29,11 @@ export class ProductsController {
   }
 
   @Get()
-  getAllProducts(){
-    return this.productsService.getAllProducts()
+  getAllProducts(@Query('page-number') pageNumber?: string, @Query('page-size') pageSize?: string){
+    return this.productsService.getAllProducts({
+      pageSize: Number(pageSize) || 10,
+      pageNumber: Number(pageNumber) || 1
+    })
   }
 
 }

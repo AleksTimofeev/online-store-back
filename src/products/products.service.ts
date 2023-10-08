@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Product } from "./products.entity";
 import { Repository } from "typeorm";
-import { ChangeProductDto, CreateProductsDto } from "./products.dto";
+import { ChangeProductDto, CreateProductsDto, GetProductsDto } from "./products.dto";
 
 @Injectable()
 export class ProductsService {
@@ -23,8 +23,18 @@ export class ProductsService {
     return findProduct;
   }
 
-  async getAllProducts() {
-    return await this.productRepository.find();
+  async getAllProducts(params: GetProductsDto) {
+    const {pageNumber, pageSize} = params
+    const products = await this.productRepository.findAndCount(
+      {
+        skip: (pageNumber - 1) * pageSize,
+        take: pageSize
+      }
+    )
+    if(!products){
+      throw new HttpException('Products not found.', HttpStatus.NOT_FOUND)
+    }
+    return {products: products[0], totalCount: products[1]}
   }
 
   async changeProduct(changeProductDto: ChangeProductDto) {
