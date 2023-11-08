@@ -22,16 +22,13 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    try {
       const findUser = await this.userService.findUserByEmail(loginDto.email);
       const passwordToEqual = await this.bcryptService.compare(loginDto.password, findUser.password);
-      if (passwordToEqual && findUser) {
-        const {password, ...payload} = findUser
-        return this.generateToken(payload)
+      if(!passwordToEqual || !findUser){
+        throw new HttpException("password or email not correct.", HttpStatus.BAD_REQUEST);
       }
-    }catch (e){
-      throw new HttpException("password or email not correct.", HttpStatus.BAD_REQUEST);
-    }
+      const {password, ...payload} = findUser
+      return this.generateToken(payload)
   }
 
   private generateToken(payload){
