@@ -17,11 +17,16 @@ export class BasketService {
     return await this.basketRepository.find({relations: {products: true}})
   }
   async getBasketById(id: string){
-    const findBasket = await this.basketRepository.findOne({where: {id}, relations: {products: true}})
-    if(!findBasket){
-      throw new HttpException('Basket not found', HttpStatus.NOT_FOUND)
+    try {
+      const findBasket = await this.basketRepository.findOne({where: {id}, relations: {products: true}})
+      if(!findBasket){
+        throw new HttpException('Basket not found', HttpStatus.BAD_REQUEST)
+      }
+      return findBasket
+    }catch (e){
+      throw new HttpException('Basket not found.', HttpStatus.BAD_REQUEST)
     }
-    return findBasket
+
   }
 
   async addProductInBasket(addProductInBasket: AddProductInBasketDto){
