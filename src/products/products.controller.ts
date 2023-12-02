@@ -9,6 +9,7 @@ export class ProductsController {
   ) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
   createProduct(@Body() createProduct: CreateProductsDto){
     return this.productsService.createProduct(createProduct)
   }
