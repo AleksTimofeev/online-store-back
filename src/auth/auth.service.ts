@@ -4,10 +4,14 @@ import { BcryptService } from "nest-bcrypt";
 import { UsersService } from "../users/users.service";
 import { LoginDto } from "./auth.dto";
 import { JwtService } from "@nestjs/jwt";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "../users/users.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
     private bcryptService: BcryptService,
     private userService: UsersService,
     private jwtService: JwtService
@@ -22,12 +26,13 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
+    const user = await this.userRepository.findOne({where: {email: loginDto.email}})
       const findUser = await this.userService.findUserByEmail(loginDto.email);
-      const passwordToEqual = await this.bcryptService.compare(loginDto.password, findUser.password);
-      if(!passwordToEqual || !findUser){
+      const passwordToEqual = await this.bcryptService.compare(loginDto.password, user.password);
+      if(!passwordToEqual || !user){
         throw new HttpException("password or email not correct.", HttpStatus.BAD_REQUEST);
       }
-      const {password, ...payload} = findUser
+      const {password, ...payload} = user
       return this.generateToken(payload)
   }
 
