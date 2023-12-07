@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards} from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { AuthGuard } from "../auth/auth.guard";
 import { Roles } from "../auth/roles-auth.decorator";
 import { RolesGuard } from "../auth/roles.guard";
 import { ChangeUserRoleDto } from "./users.dto";
+import { UUID } from "crypto";
 
 @Controller('users')
 export class UsersController {
@@ -22,6 +23,11 @@ export class UsersController {
   @Get(':email')
   findUserByEmail(@Param('email') email: string){
     return this.usersService.findUserByEmail(email)
+  }
+
+  @Get('id/:id')
+  findUserById(@Param('id') id: string){
+    return this.usersService.findUserById(id)
   }
 
   @Roles('superAdmin')
