@@ -10,6 +10,7 @@ import { Repository } from "typeorm";
 import { RolesService } from "../roles/roles.service";
 import { BasketService } from "../basket/basket.service";
 import { ProductsService } from "../products/products.service";
+import { UUID } from "crypto";
 
 @Injectable()
 export class UsersService {
@@ -56,7 +57,16 @@ export class UsersService {
   }
 
   async findUserById(id: string) {
-    return await this.userRepository.findOne({ where: { id } });
+    try {
+      const findUser = await this.userRepository.findOne({ where: { id }, relations: { role: true, basket: true } });
+      if(!findUser){
+        throw new HttpException('User not found.', HttpStatus.NOT_FOUND)
+      }
+      return findUser
+    }catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST)
+    }
+
   }
 
   async changeUserRole(changeUserRole: ChangeUserRoleDto) {
