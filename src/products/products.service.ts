@@ -27,6 +27,9 @@ export class ProductsService {
     const {pageNumber, pageSize} = params
     const products = await this.productRepository.findAndCount(
       {
+        order: {
+          [params.option]: params.sort
+        },
         skip: (pageNumber - 1) * pageSize,
         take: pageSize
       }

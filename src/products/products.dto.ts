@@ -41,4 +41,8 @@ export class GetProductsDto {
 
   @IsNumber()
   readonly pageNumber: number
+
+  readonly sort: 'asc' | 'desc'
+
+  readonly option: 'title' | 'rating' | 'price'
 }

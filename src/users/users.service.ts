@@ -53,7 +53,8 @@ export class UsersService {
     if (!user) {
       throw new HttpException("user not found", HttpStatus.NOT_FOUND);
     }
-    return user;
+    const {password, ...rest} = user
+    return rest;
   }
 
   async findUserById(id: string) {
@@ -62,7 +63,8 @@ export class UsersService {
       if(!findUser){
         throw new HttpException('User not found.', HttpStatus.NOT_FOUND)
       }
-      return findUser
+      const {password, ...rest} = findUser
+      return rest
     }catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST)
     }

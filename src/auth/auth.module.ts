@@ -5,6 +5,8 @@ import { BcryptModule } from "nest-bcrypt";
 import { UsersModule } from "../users/users.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { User } from "../users/users.entity";
 
 @Module({
   controllers: [AuthController],
@@ -17,7 +19,8 @@ import { ConfigModule } from "@nestjs/config";
       salt: 5
     }),
     JwtModule.register({secret: process.env.SECRET, signOptions: {expiresIn: '24h'}}),
-    forwardRef(() => UsersModule)
+    forwardRef(() => UsersModule),
+    TypeOrmModule.forFeature([User])
   ],
   exports: [
     JwtModule,
