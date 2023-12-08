@@ -31,12 +31,16 @@ export class ProductsController {
 
   @Get()
   getAllProducts(
+    @Query('sort') sort?: 'asc' | 'desc',
+    @Query('option') option?: 'price' | 'title' | 'rating',
     @Query('page-number') pageNumber?: string,
     @Query('page-size') pageSize?: string
   ){
     return this.productsService.getAllProducts({
       pageSize: pageSize ? Number(pageSize) : 10,
-      pageNumber: pageNumber ? Number(pageNumber) : 1
+      pageNumber: pageNumber ? Number(pageNumber) : 1,
+      sort: sort ? sort : 'asc',
+      option: option ? option : 'rating'
     })
   }
 
