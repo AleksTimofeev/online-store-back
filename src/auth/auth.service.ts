@@ -26,8 +26,9 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const user = await this.userRepository.findOne({where: {email: loginDto.email}})
-      const findUser = await this.userService.findUserByEmail(loginDto.email);
+    const user = await this.userRepository.findOne(
+      {where: {email: loginDto.email}, relations: {basket: true, role: true}}
+    )
       const passwordToEqual = await this.bcryptService.compare(loginDto.password, user.password);
       if(!passwordToEqual || !user){
         throw new HttpException("password or email not correct.", HttpStatus.BAD_REQUEST);
